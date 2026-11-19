@@ -105,10 +105,8 @@ index=ir sourcetype=o365:reporting:messagetrace SenderAddress="hr-support@nexus-
 
 ![Distinct email recipients](../screenshots/step-07.png)
 
-## Reflection
 
 Correlating identity, mail, and audit events helped me build a clearer timeline than reviewing each source on its own.
 
-## Defensive takeaways
 
 I would alert on unusual successful sign-ins, unexpected inbox-rule creation, and phishing messages sent to multiple employees.
