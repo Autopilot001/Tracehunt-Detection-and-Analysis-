@@ -1,4 +1,4 @@
-# Trace the Signal — Detection and Analysis
+# Trace Signal Detection and Analysis
 
 ## Focus
 
