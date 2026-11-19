@@ -1,4 +1,4 @@
-# Trace Signal Detection and Analysis
+# Trace the Signal — Detection and Analysis
 
 ## Focus
 
@@ -18,11 +18,9 @@ status.errorCode=0
 | table _time ipAddress location.city location.countryOrRegion
 ```
 
-<details><summary>Screenshot 1 — Sign-in activity</summary>
+**Screenshot 1 — Sign-in activity**
 
 ![Sign-in activity](../screenshots/step-01.png)
-
-</details>
 
 ### Trace the email that arrived before the sign-in
 
@@ -34,11 +32,9 @@ index=ir sourcetype=o365:reporting:messagetrace RecipientAddress="l.chen@nexusfi
 | sort Received
 ```
 
-<details><summary>Screenshot 2 — Message trace and subject</summary>
+**Screenshot 2 — Message trace and subject**
 
 ![Message trace and subject](../screenshots/step-02.png)
-
-</details>
 
 ### Confirm the sender domain
 
@@ -49,11 +45,9 @@ index=ir sourcetype=o365:reporting:messagetrace RecipientAddress="l.chen@nexusfi
 | table SenderAddress Subject Received
 ```
 
-<details><summary>Screenshot 3 — Sender domain</summary>
+**Screenshot 3 — Sender domain**
 
 ![Sender domain](../screenshots/step-03.png)
-
-</details>
 
 ## Analysis
 
@@ -66,11 +60,9 @@ index=ir sourcetype=azure:aad:signin ipAddress="[ATTACKER_IP]"
 | stats dc(userPrincipalName) as CompromisedAccounts
 ```
 
-<details><summary>Screenshot 4 — Distinct affected accounts</summary>
+**Screenshot 4 — Distinct affected accounts**
 
 ![Distinct affected accounts](../screenshots/step-04.png)
-
-</details>
 
 ### Identify the other affected account
 
@@ -82,11 +74,9 @@ index=ir sourcetype=azure:aad:signin ipAddress="[ATTACKER_IP]"
 | table userPrincipalName
 ```
 
-<details><summary>Screenshot 5 — Accounts in the sign-in results</summary>
+**Screenshot 5 — Accounts in the sign-in results**
 
 ![Accounts in the sign-in results](../screenshots/step-05.png)
-
-</details>
 
 ### Look for mailbox persistence
 
@@ -98,11 +88,9 @@ Operation="New-InboxRule"
 | table _time Name ClientIP
 ```
 
-<details><summary>Screenshot 6 — New inbox rule</summary>
+**Screenshot 6 — New inbox rule**
 
 ![New inbox rule](../screenshots/step-06.png)
-
-</details>
 
 ### Measure the phishing campaign's reach
 
@@ -113,14 +101,14 @@ index=ir sourcetype=o365:reporting:messagetrace SenderAddress="hr-support@nexus-
 | stats dc(RecipientAddress)
 ```
 
-<details><summary>Screenshot 7 — Distinct email recipients</summary>
+**Screenshot 7 — Distinct email recipients**
 
 ![Distinct email recipients](../screenshots/step-07.png)
 
-</details>
-
+## Reflection
 
 Correlating identity, mail, and audit events helped me build a clearer timeline than reviewing each source on its own.
 
+## Defensive takeaways
 
 I would alert on unusual successful sign-ins, unexpected inbox-rule creation, and phishing messages sent to multiple employees.
