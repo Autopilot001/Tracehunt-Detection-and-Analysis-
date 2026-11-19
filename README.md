@@ -8,7 +8,3 @@ I followed the investigation from an unusual sign-in through the phishing email 
 **Focus:** Identity and email log analysis
 
 [Read my write-up](docs/WRITEUP.md)
-
-## Screenshots
-
-The screenshots are stored in [`screenshots/`](screenshots/) and shown beside the related steps in the write-up.
