@@ -6,9 +6,9 @@ I traced a suspicious sign-in through the phishing email and mailbox changes, th
 
 ## Detection
 
-### Found the unusual sign-ins
+### Found the unusual signins
 
-I began with the affected account's Entra ID sign-in events. I compared the time, source address, location, application, and authentication result so I could separate expected activity from successful sign-ins that needed a closer look. The results pointed to unusual successful sign-ins from Amsterdam.
+I began with the affected account's Entra ID signin events. I compared the time, source address, location, application, and authentication result so I could separate expected activity from successful sign-ins that needed a closer look. The results pointed to unusual successful signins from Amsterdam.
 
 ```spl
 index=ir sourcetype=azure:aad:signin userPrincipalName="l.chen@nexusfinancial.thm"
@@ -18,13 +18,13 @@ status.errorCode=0
 | table _time ipAddress location.city location.countryOrRegion
 ```
 
-**Screenshot 1 — Sign-in activity**
+**Screenshot 1  Signin activity**
 
 ![Sign-in activity](../screenshots/step-01.png)
 
 ### Traced the email that arrived before the sign-in
 
-Next I checked message-trace records for Laura Chen. I sorted the delivered messages by time and compared the sender, subject, source, and delivery status. One unfamiliar message stood out because it arrived shortly before the suspicious activity.
+Next I checked message trace records for Laura Chen. I sorted the delivered messages by time and compared the sender, subject, source, and delivery status. One unfamiliar message stood out because it arrived shortly before the suspicious activity.
 
 ```spl
 index=ir sourcetype=o365:reporting:messagetrace RecipientAddress="l.chen@nexusfinancial.thm"
@@ -32,13 +32,13 @@ index=ir sourcetype=o365:reporting:messagetrace RecipientAddress="l.chen@nexusfi
 | sort Received
 ```
 
-**Screenshot 2 — Message trace and subject**
+**Screenshot 2 Message trace and subject**
 
 ![Message trace and subject](../screenshots/step-02.png)
 
 ### Confirmed the sender domain
 
-I narrowed the message-trace results to the sender and recipient fields. That confirmed the suspicious message came from an external lookalike domain, which I treated as an indicator for the rest of the investigation.
+I narrowed the message trace results to the sender and recipient fields. That confirmed the suspicious message came from an external lookalike domain, which I treated as an indicator for the rest of the investigation.
 
 ```spl
 index=ir sourcetype=o365:reporting:messagetrace RecipientAddress="l.chen@nexusfinancial.thm"
@@ -53,14 +53,14 @@ index=ir sourcetype=o365:reporting:messagetrace RecipientAddress="l.chen@nexusfi
 
 ### Checked how many accounts used the same source
 
-I searched sign-in events for the suspicious source and counted distinct user accounts. The results showed that the activity affected more than one account.
+I searched sign in events for the suspicious source and counted distinct user accounts. The results showed that the activity affected more than one account.
 
 ```spl
 index=ir sourcetype=azure:aad:signin ipAddress="[ATTACKER_IP]"
 | stats dc(userPrincipalName) as CompromisedAccounts
 ```
 
-**Screenshot 4 — Distinct affected accounts**
+**Screenshot 4  Distinct affected accounts**
 
 ![Distinct affected accounts](../screenshots/step-04.png)
 
@@ -74,7 +74,7 @@ index=ir sourcetype=azure:aad:signin ipAddress="[ATTACKER_IP]"
 | table userPrincipalName
 ```
 
-**Screenshot 5 — Accounts in the sign-in results**
+**Screenshot 5  Accounts in the sign in results**
 
 ![Accounts in the sign-in results](../screenshots/step-05.png)
 
@@ -88,7 +88,7 @@ Operation="New-InboxRule"
 | table _time Name ClientIP
 ```
 
-**Screenshot 6 — New inbox rule**
+**Screenshot 6  New inbox rule**
 
 ![New inbox rule](../screenshots/step-06.png)
 
@@ -101,7 +101,7 @@ index=ir sourcetype=o365:reporting:messagetrace SenderAddress="hr-support@nexus-
 | stats dc(RecipientAddress)
 ```
 
-**Screenshot 7 — Distinct email recipients**
+**Screenshot 7  Distinct email recipients**
 
 ![Distinct email recipients](../screenshots/step-07.png)
 
